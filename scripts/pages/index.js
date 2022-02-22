@@ -1,4 +1,4 @@
-import PhotographerFactory from "../factories/photographer.js";
+import PhotographerFactory from "../factories/Photographer.js";
 
 async function getPhotographers() {
     // Penser à remplacer par les données récupérées dans le json
@@ -33,8 +33,9 @@ async function displayData(photographers) {
     const photographersSection = document.querySelector(".photographer_section");
 
     photographers.forEach((photographer) => {
-        const photographerModel = PhotographerFactory(photographer);
+        const photographerModel = new PhotographerFactory(photographer);
         const userCardDOM = photographerModel.getUserCardDOM();
+        console.log(photographerModel);
         photographersSection.appendChild(userCardDOM);
     });
 }
