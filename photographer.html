@@ -1,36 +1,49 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <link href="css/style.css" rel="stylesheet" type="text/css" />
-    <meta charset="utf-8">
-    <link rel="icon" type="image/png" href="assets/favicon.png">
-    <link href="https://fonts.googleapis.com/css?family=DM+Sans&display=swap" rel="stylesheet">
-    <title>Fisheye - photographe </title>
-  </head>
-  <body>
-    <header>
-      <img src="assets/images/logo.png" class="logo" />
-    </header>
-    <main id="main">
-      <div class="photograph-header">
+
+<head>
+  <link href="css/style.css" rel="stylesheet" type="text/css" />
+  <meta charset="utf-8">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link href="https://fonts.googleapis.com/css?family=DM+Sans&display=swap" rel="stylesheet">
+  <title>Fisheye - photographe </title>
+</head>
+
+<body>
+  <script src="/scripts/utils/contactForm.js"></script>
+  <header>
+    <a href="./index.html" aria-label="Retour à la page d'accueil">
+      <img src="assets/images/logo.png" alt="Fisheye Home page" class="logo" />
+    </a>
+  </header>
+  <main id="main">
+    <div class="photograph-header">
+      <div class="wrap-header">
+        <div class="left">
+          <h2>Mimi Keel</h2>
+          <p class="location">London, UK</p>
+          <p class="tagline">Voir le beau dans le quotidien</p>
+        </div>
         <button class="contact_button" onclick="displayModal()">Contactez-moi</button>
+        <img src="assets/samplePhotos/Photographers_ID_Photos/MimiKeel.jpg" alt="" />
       </div>
-    </main>
-    <div id="contact_modal">
-			<div class="modal">
-				<header>
-          <h2>Contactez-moi</h2>
-          <img src="assets/icons/close.svg" onclick="closeModal()" />
-        </header>
-				<form>
-					<div>
-						<label>Prénom</label>
-						<input />
-					</div>
-          <button class="contact_button">Envoyer</button>
-				</form>
-			</div>
-		</div>
-    <script src="/scripts/utils/contactForm.js"></script>
-  </body>
+    </div>
+  </main>
+  <div id="contact_modal">
+    <div class="modal">
+      <header>
+        <h2>Contactez-moi</h2>
+        <img src="assets/icons/close.svg" onclick="closeModal()" />
+      </header>
+      <form>
+        <div>
+          <label>Prénom</label>
+          <input />
+        </div>
+        <button class="contact_button">Envoyer</button>
+      </form>
+    </div>
+  </div>
+</body>
+
 </html>
