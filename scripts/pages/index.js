@@ -1,10 +1,10 @@
-import PhotographerFactory from "../factories/PhotographerFactory.js";
+import AllPhotographer from "../factories/AllPhotographer.js";
 
 // eslint-disable-next-line no-unused-vars
 let photographer;
 
 function init() {
-    photographer = new PhotographerFactory();
+    photographer = new AllPhotographer();
 }
 
 init();
