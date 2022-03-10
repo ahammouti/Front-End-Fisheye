@@ -4,7 +4,7 @@ export default class PhotographerFactory {
         this.arrayPhotographers = [];
 
         // feinte
-        this.getPhotographers = () => this._getPhotographers();
+        this.getPhotographers = (e) => this._getPhotographers(e);
 
         // Appel des méthodes
         this.getPhotographers();
@@ -18,7 +18,6 @@ export default class PhotographerFactory {
 
             // enregistrement du tableau fetch
             this.arrayPhotographers = res.photographers;
-
             this.displayData(this.arrayPhotographers);
         }
     }
@@ -27,6 +26,7 @@ export default class PhotographerFactory {
     displayData(photographers) {
         const photographersSection = document.querySelector(".photographer_section");
         photographersSection.innerHTML = "";
+
         photographers.forEach((photographer) => {
             const article = document.createElement("article");
             this._picture = `assets/samplePhotos/Photographers_ID_Photos/${photographer.portrait}`;

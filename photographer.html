@@ -3,10 +3,10 @@
 
 <head>
   <link href="css/style.css" rel="stylesheet" type="text/css" />
-  <meta charset="utf-8">
-  <link rel="icon" type="image/png" href="assets/favicon.png">
-  <link href="https://fonts.googleapis.com/css?family=DM+Sans&display=swap" rel="stylesheet">
-  <title>Fisheye - photographe </title>
+  <meta charset="utf-8" />
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link href="https://fonts.googleapis.com/css?family=DM+Sans&display=swap" rel="stylesheet" />
+  <title>Fisheye - photographe</title>
 </head>
 
 <body>
@@ -18,7 +18,25 @@
   </header>
   <main id="main">
     <header class="photograph-header"></header>
-    <section></section>
+    <section class="container-gallery">
+      <section class="section-sort">
+        <label for="sort-select">Trier par</label>
+        <select name="sort-select" id="sort">
+          <option selected value="popularite">
+            Popularité
+          </option>
+          <option value="date">
+            Date
+          </option>
+          <option value="Titre">
+            Titre
+          </option>
+        </select>
+      </section>
+
+      <section class="gallery">
+      </section>
+    </section>
   </main>
   <div id="contact_modal">
     <div class="modal">

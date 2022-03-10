@@ -2,10 +2,12 @@
   display: none;
 }
 
+/* ================ (Main) section photograph-header ================ */
 .photograph-header {
   background-color: #fafafa;
-  height: 300px;
+  min-height: 300px;
   margin: 0 100px;
+  padding: 50px 20px;
   display: flex;
   justify-content: space-between;
 }
@@ -22,18 +24,24 @@
   color: #d3573c;
   font-family: "DM Sans", sans-serif;
   font-weight: normal;
-  font-size: 3vmax;
+  font-size: 64px;
   margin: 0;
 }
 
 .photograph-header .left .location {
-  font-size: 1.3vmax;
+  font-size: 24px;
   margin: 5px 0;
   font-weight: 550;
   color: #901c1c;
 }
 
+.photograph-header .left .tagline {
+  font-size: 18px;
+}
+
 .photograph-header img {
+  margin-right: 10px;
+  margin-left: 20px;
   height: 180px;
   width: 180px;
   object-fit: cover;
@@ -45,12 +53,64 @@
   font-weight: bold;
   color: white;
   padding: 11px;
-  width: 170px;
+  margin: 0 20px;
+  min-width: 170px;
   height: 70px;
   border: none;
   background-color: #901c1c;
   border-radius: 5px;
   cursor: pointer;
+}
+
+/* ================ (Main) section gallery medias ================ */
+.container-gallery {
+  margin: 0 100px;
+}
+
+.container-gallery .section-sort {
+  /* background: #d4d4; */
+  display: flex;
+  align-items: center;
+  margin: 30px 0;
+}
+
+.container-gallery .section-sort label {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.container-gallery .section-sort button {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-left: 20px;
+  padding: 8px 15px;
+  width: 170px;
+  font-size: 18px;
+  color: #fafafa;
+  background-color: #901c1c;
+  border: none;
+  text-align: left;
+  border-radius: 6px;
+}
+
+.gallery img {
+  width: 400px;
+}
+
+.container-gallery .section-sort button img {
+  margin-left: 30px;
+}
+
+.container-gallery .section-sort select {
+  cursor: pointer;
+  margin-left: 20px;
+  padding: 5px;
+  width: 170px;
+  font-size: 18px;
+  color: #fafafa;
+  background-color: #901c1c;
+  border-radius: 5px;
 }
 
 .modal {
