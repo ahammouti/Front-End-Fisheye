@@ -24,7 +24,7 @@ export default class PhotographerFactory {
 
     // Home page display data
     displayData(photographers) {
-        const photographersSection = document.querySelector(".photographer_section");
+        const photographersSection = document.getElementsByClassName("photographer_section")[0];
         photographersSection.innerHTML = "";
 
         photographers.forEach((photographer) => {

@@ -17,7 +17,6 @@ export default class OnePhotographer {
 
         this.bindEvent();
         this.getPhotographers();
-
     }
 
     bindEvent() {
@@ -52,7 +51,7 @@ export default class OnePhotographer {
         });
     }
 
-    async filterMedia() {
+    filterMedia() {
         this.arrayPhotographers.media.filter(e => {
 
             if (this.idPhotographer == e.photographerId) {
@@ -61,7 +60,7 @@ export default class OnePhotographer {
                 this.newArrMedia.sort((a, b) => b.likes - a.likes);
             }
         });
-        await this.displayDataGallery(this.newArrMedia);
+        this.displayDataGallery(this.newArrMedia);
     }
 
     filterTypeMedia(type) {
@@ -94,39 +93,52 @@ export default class OnePhotographer {
     }
 
     displayDataPagePhotographer(photographer) {
-        const photographHeader = document.querySelector(".photograph-header");
-        photographHeader.innerHTML = "";
+        const photographerName = document.getElementById("js-photographerName");
+        const location = document.getElementById("js-location");
+        const tagline = document.getElementById("js-tagline");
+        const profilePicture = document.getElementById("js-profilePicture");
 
-        const section = document.createElement("section");
-        section.classList.add("wrap-header");
-
-        section.innerHTML = `
-        <div class="left">
-        <h2>${photographer.name}</h2>
-        <p class="location">${photographer.city}, ${photographer.country}</p>
-        <p class="tagline">${photographer.tagline}</p>
-        </div>
-        <button class="contact_button" onclick="displayModal()">Contactez-moi</button>
-        <img src="assets/samplePhotos/Photographers_ID_Photos/${photographer.portrait}" alt="${photographer.name}" />
-        `;
-        photographHeader.appendChild(section);
+        photographerName.textContent = `${photographer.name}`;
+        location.textContent = `${photographer.city}, ${photographer.country}`;
+        tagline.textContent = `${photographer.tagline}`;
+        profilePicture.src = `assets/samplePhotos/Photographers_ID_Photos/${photographer.portrait}`;
+        profilePicture.setAttribute("alt", `${photographer.name}`);
     }
 
     displayDataGallery(tabl) {
         const sectionGallery = document.getElementsByClassName("gallery")[0];
         sectionGallery.innerHTML = "";
 
-
         tabl.map(item => {
             console.log(item);
+            let videosOrPicture = () => {
+                if (item.video) {
+                    return `
+                        <video controls>
+                            <source
+                            src="./assets/samplePhotos/${item.photographerId}/${item.video}"
+                            type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    `;
+                }
+                else {
+                    return `
+                        <img src="../../assets/samplePhotos/${this.photographer.id}/${item.image}" alt="${item.title}" />
+                    `;
+                }
+            };
             const card = document.createElement("div");
             card.classList.add("card");
             card.innerHTML = `
-                <img src="../../assets/samplePhotos/${this.photographer.id}/${item.image}" />
-                <h2>${item.title} + ${item.likes}</h2>
+                <a href="#">
+                    ${videosOrPicture()}
+                </a>
+                <a href="#">
+                    <h2>${item.title}      ❤️${item.likes}</h2>
+                </a>
             `;
             sectionGallery.appendChild(card);
-
         });
     }
 }

@@ -1,9 +1,9 @@
-<!DOCTYPE html>
 <html>
 
 <head>
   <link href="css/style.css" rel="stylesheet" type="text/css" />
   <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" href="assets/favicon.png" />
   <link href="https://fonts.googleapis.com/css?family=DM+Sans&display=swap" rel="stylesheet" />
   <title>Fisheye - photographe</title>
@@ -17,7 +17,17 @@
     </a>
   </header>
   <main id="main">
-    <header class="photograph-header"></header>
+    <header class="photograph-header">
+      <section class="wrap-header">
+        <div class="left">
+          <h2 id="js-photographerName" class="photographerName"></h2>
+          <p id="js-location" class="location"></p>
+          <p id="js-tagline" class="tagline"></p>
+        </div>
+        <button class="contact_button" onclick="displayModal()">Contactez-moi</button>
+        <img id="js-profilePicture" />
+      </section>
+    </header>
     <section class="container-gallery">
       <section class="section-sort">
         <label for="sort-select">Trier par</label>
