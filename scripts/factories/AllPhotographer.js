@@ -12,7 +12,13 @@ export default class PhotographerFactory {
 
     // Méthodes
     async _getPhotographers() {
-        const response = await fetch("../../data/photographers.json");
+        const response = await fetch("../../data/photographers.json", {
+            method: "GET",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+        });
         if (response.status === 200) {
             const res = await response.json();
 
