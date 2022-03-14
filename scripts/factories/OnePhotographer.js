@@ -101,7 +101,7 @@ export default class OnePhotographer {
         photographerName.textContent = `${photographer.name}`;
         location.textContent = `${photographer.city}, ${photographer.country}`;
         tagline.textContent = `${photographer.tagline}`;
-        profilePicture.src = `../../assets/samplePhotos/Photographers_ID_Photos/${photographer.portrait}`;
+        profilePicture.src = `./assets/samplePhotos/Photographers_ID_Photos/${photographer.portrait}`;
         profilePicture.setAttribute("alt", `${photographer.name}`);
     }
 
