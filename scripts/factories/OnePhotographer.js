@@ -124,7 +124,7 @@ export default class OnePhotographer {
                 }
                 else {
                     return `
-                        <img src="../../assets/samplePhotos/${this.photographer.id}/${item.image}" alt="${item.title}" />
+                        <img src="./assets/samplePhotos/${this.photographer.id}/${item.image}" alt="${item.title}" />
                     `;
                 }
             };
