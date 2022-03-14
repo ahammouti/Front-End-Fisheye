@@ -154,7 +154,7 @@ body,
   object-fit: cover;
   height: 300px;
   border-radius: 6px;
-  max-width: 350px;
+  /* max-width: 350px; */
   width: 100%;
 }
 

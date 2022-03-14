@@ -67,29 +67,35 @@ export default class OnePhotographer {
         // creer un new tableau
         let filterMedia = [];
         if (type == "popularite") {
-            // filtrer popularite
-            this.newArrMedia.sort((a, b) => {
-                return b.likes - a.likes;
-            });
-
-            // trier tableau et remplir
-            // this.displayDataGallery(filterMedia);
+            this.newArrMedia.sort((a, b) => b.likes - a.likes);
             filterMedia.push(this.newArrMedia);
             this.displayDataGallery(filterMedia[0]);
         }
         else if (type == "date") {
-            this.displayDataGallery(filterMedia);
-            // filtrer titre
-            // trier tableau et remplir
+            this.newArrMedia.sort((a, b) => {
+                let da = new Date(a.date),
+                    db = new Date(b.date);
+                return db - da;
+            });
+            filterMedia.push(this.newArrMedia);
+            this.displayDataGallery(filterMedia[0]);
         }
         else if (type == "Titre") {
+            this.newArrMedia.sort((a, b) => {
+                let t1 = a.title.toLowerCase(),
+                    t2 = b.title.toLowerCase();
 
-            // trier tableau et remplir
+                if (t1 < t2) {
+                    return -1;
+                }
+                if (t1 > t2) {
+                    return 1;
+                }
+                return 0;
+            });
+            filterMedia.push(this.newArrMedia);
+            this.displayDataGallery(filterMedia[0]);
         }
-
-        // si images ne s'affichent pas utiliser await async ligne 65
-
-        console.log("type", type);
     }
 
     displayDataPagePhotographer(photographer) {
@@ -110,7 +116,6 @@ export default class OnePhotographer {
         sectionGallery.innerHTML = "";
 
         tabl.map(item => {
-            console.log(item);
             let videosOrPicture = () => {
                 if (item.video) {
                     return `
