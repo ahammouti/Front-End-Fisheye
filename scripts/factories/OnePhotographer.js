@@ -29,7 +29,7 @@ export default class OnePhotographer {
     }
 
     async _getPhotographers() {
-        const response = await fetch("../../data/photographers.json");
+        const response = await fetch("data/photographers.json");
         if (response.status === 200) {
             const res = await response.json();
 
