@@ -143,12 +143,12 @@ body,
   display: flex;
 }
 
-.gallery .card .link__title {
+.gallery .card .card__title {
   display: flex;
   flex: 1;
 }
 
-.gallery .card .link__title h3 {
+.gallery .card .card__title {
   font-size: 24px;
   font-weight: 599;
   color: #901c1c;
@@ -248,6 +248,21 @@ form input {
 
   .contact_button {
     margin: 50px 0;
+  }
+
+  .container-gallery {
+    margin: 0 40px;
+  }
+
+  .container-gallery .gallery {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ============== Responsive 672 px ============== */
+@media screen and (max-width: 672px) {
+  .container-gallery .gallery {
+    grid-template-columns: repeat(1, 1fr);
   }
 }
 

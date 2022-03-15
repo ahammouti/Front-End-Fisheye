@@ -144,9 +144,7 @@ export default class OnePhotographer {
                     ${videosOrPicture()}
                 </a>
                 <div class="card__overlay">
-                    <a class="link__title" href="#">
-                        <h3 class="card__title">${item.title}</h3>
-                    </a>
+                    <h3 class="card__title">${item.title}</h3>
                     <span class="card__likes">
                         <p>${item.likes}❤️</p>
                     </span>
