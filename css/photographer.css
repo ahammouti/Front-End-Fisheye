@@ -139,8 +139,31 @@ body,
   row-gap: 50px;
 }
 
-.gallery .card {
-  height: 351px;
+.gallery .card .card__overlay {
+  display: flex;
+}
+
+.gallery .card .link__title {
+  display: flex;
+  flex: 1;
+}
+
+.gallery .card .link__title h3 {
+  font-size: 24px;
+  font-weight: 599;
+  color: #901c1c;
+}
+
+.gallery .card .card__likes {
+  display: flex;
+  justify-content: end;
+  margin-top: 13px;
+  flex: 0.4;
+}
+
+.gallery .card .card__likes p {
+  width: 100%;
+  text-align: right;
 }
 
 .gallery img {
@@ -154,7 +177,6 @@ body,
   object-fit: cover;
   height: 300px;
   border-radius: 6px;
-  /* max-width: 350px; */
   width: 100%;
 }
 

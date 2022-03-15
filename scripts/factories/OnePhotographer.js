@@ -1,10 +1,8 @@
 export default class OnePhotographer {
     constructor() {
         // init du tableau de fetch
-        this.arrayPhotographers = [];
+        this.arrayPhotographers, this.arrayMedia, this.newArrMedia = [];
         this.photographer = "";
-        this.arrayMedia = [];
-        this.newArrMedia = [];
         this.filterSelect = document.getElementById("sort");
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -64,7 +62,6 @@ export default class OnePhotographer {
     }
 
     filterTypeMedia(type) {
-        // creer un new tableau
         let filterMedia = [];
         if (type == "popularite") {
             this.newArrMedia.sort((a, b) => b.likes - a.likes);
@@ -118,12 +115,19 @@ export default class OnePhotographer {
         tabl.map(item => {
             let videosOrPicture = () => {
                 if (item.video) {
+                    card.addEventListener("mouseover", () => {
+                        let video = document.getElementsByTagName("video")[0];
+                        video.setAttribute("controls", true);
+                    });
+                    card.addEventListener("mouseleave", () => {
+                        let video = document.getElementsByTagName("video")[0];
+                        video.removeAttribute("controls");
+                    });
                     return `
-                        <video controls>
+                        <video>
                             <source
                             src="./assets/samplePhotos/${item.photographerId}/${item.video}"
                             type="video/mp4">
-                            Your browser does not support the video tag.
                         </video>
                     `;
                 }
@@ -136,12 +140,17 @@ export default class OnePhotographer {
             const card = document.createElement("div");
             card.classList.add("card");
             card.innerHTML = `
-                <a href="#">
+                <a class="card__img" href="#">
                     ${videosOrPicture()}
                 </a>
-                <a href="#">
-                    <h2>${item.title}      ❤️${item.likes}</h2>
-                </a>
+                <div class="card__overlay">
+                    <a class="link__title" href="#">
+                        <h3 class="card__title">${item.title}</h3>
+                    </a>
+                    <span class="card__likes">
+                        <p>${item.likes}❤️</p>
+                    </span>
+                </div>
             `;
             sectionGallery.appendChild(card);
         });
