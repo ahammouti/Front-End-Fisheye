@@ -345,6 +345,15 @@ form input {
     flex-direction: column-reverse;
   }
 
+  .total-likes {
+    width: 200px;
+    font-size: 14px;
+  }
+
+  .total-likes .container-totalLikes {
+    font-size: 14px;
+  }
+
   .contact_button {
     margin: 50px 0;
   }
