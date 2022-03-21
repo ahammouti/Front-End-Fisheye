@@ -1,9 +1,14 @@
 export default class OnePhotographer {
     constructor() {
         // init du tableau de fetch
+        this.filterSelect = document.getElementById("sort");
+        this.divTotalLikes = document.getElementById("js-totalLike");
+        this.divPrice = document.getElementById("js-price");
         this.arrayPhotographers, this.arrayMedia, this.newArrMedia = [];
         this.photographer = "";
-        this.filterSelect = document.getElementById("sort");
+        this.totalOfLikes = 0;
+        this.parseTotal = 0;
+
 
         const urlParams = new URLSearchParams(window.location.search);
         this.idPhotographer = urlParams.get("id");
@@ -12,6 +17,7 @@ export default class OnePhotographer {
         this.getPhotographers = (e) => this._getPhotographers(e);
         this.getMedias = () => this._getMedias();
         this.getFilterType = (e) => this._getFilterType(e);
+        this.likePhoto = (e) => this._likePhoto(e);
 
         this.bindEvent();
         this.getPhotographers();
@@ -44,6 +50,7 @@ export default class OnePhotographer {
         this.arrayPhotographers.photographers.filter(e => {
             if (this.idPhotographer == e.id) {
                 this.photographer = e;
+
                 this.displayDataPagePhotographer(this.photographer);
             }
         });
@@ -58,6 +65,14 @@ export default class OnePhotographer {
                 this.newArrMedia.sort((a, b) => b.likes - a.likes);
             }
         });
+        for (let i = 0; i < this.newArrMedia.length; i++) {
+            const element = this.newArrMedia[i];
+            this.totalOfLikes += element.likes;
+        }
+        this.divTotalLikes.textContent = this.totalOfLikes;
+        this.parseTotal = parseInt(this.divTotalLikes.textContent);
+        this.divPrice.textContent = this.photographer.price + "€ / jour";
+
         this.displayDataGallery(this.newArrMedia);
     }
 
@@ -66,6 +81,9 @@ export default class OnePhotographer {
         if (type == "popularite") {
             this.newArrMedia.sort((a, b) => b.likes - a.likes);
             filterMedia.push(this.newArrMedia);
+            this.divTotalLikes.textContent = this.totalOfLikes;
+            this.parseTotal = parseInt(this.divTotalLikes.textContent);
+
             this.displayDataGallery(filterMedia[0]);
         }
         else if (type == "date") {
@@ -75,6 +93,9 @@ export default class OnePhotographer {
                 return db - da;
             });
             filterMedia.push(this.newArrMedia);
+
+            this.divTotalLikes.textContent = this.totalOfLikes;
+            this.parseTotal = parseInt(this.divTotalLikes.textContent);
             this.displayDataGallery(filterMedia[0]);
         }
         else if (type == "Titre") {
@@ -91,6 +112,9 @@ export default class OnePhotographer {
                 return 0;
             });
             filterMedia.push(this.newArrMedia);
+
+            this.divTotalLikes.textContent = this.totalOfLikes;
+            this.parseTotal = parseInt(this.divTotalLikes.textContent);
             this.displayDataGallery(filterMedia[0]);
         }
     }
@@ -108,49 +132,88 @@ export default class OnePhotographer {
         profilePicture.setAttribute("alt", `${photographer.name}`);
     }
 
+    videosOrPicture = (item, card) => {
+        if (item.video) {
+            card.addEventListener("mouseover", () => {
+                let video = document.getElementsByTagName("video")[0];
+                video.setAttribute("controls", true);
+            });
+            card.addEventListener("mouseleave", () => {
+                let video = document.getElementsByTagName("video")[0];
+                video.removeAttribute("controls");
+            });
+            return `
+                <video>
+                    <source
+                    src="./assets/samplePhotos/${item.photographerId}/${item.video}"
+                    type="video/mp4">
+                </video>
+            `;
+        }
+        else {
+            return `
+                <img src="./assets/samplePhotos/${this.photographer.id}/${item.image}" alt="${item.title}" />
+            `;
+        }
+    };
+
     displayDataGallery(tabl) {
         const sectionGallery = document.getElementsByClassName("gallery")[0];
         sectionGallery.innerHTML = "";
 
         tabl.map(item => {
-            let videosOrPicture = () => {
-                if (item.video) {
-                    card.addEventListener("mouseover", () => {
-                        let video = document.getElementsByTagName("video")[0];
-                        video.setAttribute("controls", true);
-                    });
-                    card.addEventListener("mouseleave", () => {
-                        let video = document.getElementsByTagName("video")[0];
-                        video.removeAttribute("controls");
-                    });
-                    return `
-                        <video>
-                            <source
-                            src="./assets/samplePhotos/${item.photographerId}/${item.video}"
-                            type="video/mp4">
-                        </video>
-                    `;
-                }
-                else {
-                    return `
-                        <img src="./assets/samplePhotos/${this.photographer.id}/${item.image}" alt="${item.title}" />
-                    `;
-                }
-            };
             const card = document.createElement("div");
             card.classList.add("card");
             card.innerHTML = `
                 <a class="card__img" href="#">
-                    ${videosOrPicture()}
+                    ${this.videosOrPicture(item, card)}
                 </a>
                 <div class="card__overlay">
                     <h3 class="card__title">${item.title}</h3>
-                    <span class="card__likes">
-                        <p>${item.likes}❤️</p>
-                    </span>
+                    <div class="card__likes">
+                        <div class="js-photoLike" data-isliked=false>
+                            <p class="like">${item.likes}</p>
+                            <div class="heart">
+                                <i class="far fa-heart"></i>
+                                <span class="js-heartSolid">
+                                    <i class="fas fa-heart"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             `;
             sectionGallery.appendChild(card);
+
         });
+        const likePhotos = document.getElementsByClassName("js-photoLike");
+
+        for (const likePhoto of likePhotos) {
+            likePhoto.addEventListener("click", this.likePhoto);
+        }
+    }
+
+    _likePhoto(e) {
+        const jsHeartSolid = e.currentTarget.getElementsByClassName("js-heartSolid")[0];
+        const container = e.currentTarget.getElementsByClassName("like")[0];
+        const numberLike = parseInt(container.textContent);
+        const isLiked = e.currentTarget.dataset.isliked;
+
+        if (isLiked == "false") {
+            const newLike = numberLike + 1;
+            container.textContent = newLike;
+            e.currentTarget.setAttribute("data-isliked", true);
+            this.parseTotal += 1;
+            this.divTotalLikes.textContent = this.parseTotal;
+            jsHeartSolid.classList.add("show");
+        }
+        else {
+            const newLike = numberLike - 1;
+            container.textContent = newLike;
+            e.currentTarget.setAttribute("data-isliked", false);
+            this.parseTotal -= 1;
+            this.divTotalLikes.textContent = this.parseTotal;
+            jsHeartSolid.classList.remove("show");
+        }
     }
 }

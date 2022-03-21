@@ -157,13 +157,42 @@ body,
 .gallery .card .card__likes {
   display: flex;
   justify-content: end;
-  margin-top: 13px;
-  flex: 0.4;
 }
 
-.gallery .card .card__likes p {
+.gallery .card .card__likes .js-photoLike {
   width: 100%;
+  display: flex;
+  flex: 0.4;
   text-align: right;
+  margin-top: 30px;
+  cursor: pointer;
+}
+
+.gallery .card .card__likes .js-photoLike .like {
+  display: flex;
+  margin: 0;
+  color: #901c1c;
+  font-weight: bold;
+}
+
+.gallery .card .card__likes .js-photoLike .heart {
+  margin-left: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #901c1c;
+  opacity: 1;
+  position: relative;
+}
+
+.gallery .card .card__likes .js-photoLike .heart .js-heartSolid {
+  position: absolute;
+  left: 0;
+  opacity: 0;
+}
+
+.gallery .card .card__likes .js-photoLike .heart .js-heartSolid.show {
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
 }
 
 .gallery img {
@@ -178,6 +207,39 @@ body,
   height: 300px;
   border-radius: 6px;
   width: 100%;
+}
+
+.total-likes {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  bottom: 0;
+  color: #002;
+  font-weight: bold;
+  font-size: 18px;
+  right: 30px;
+  border-radius: 5px 5px 0 0;
+  background: #db8876;
+  width: 300px;
+  height: 50px;
+}
+
+.total-likes #js-price {
+  padding-right: 20px;
+}
+
+.total-likes .container-totalLikes {
+  display: flex;
+  color: #002;
+  font-weight: bold;
+  align-items: center;
+  padding-left: 20px;
+  font-size: 18px;
+}
+
+.total-likes .container-totalLikes span {
+  margin-left: 10px;
 }
 
 .modal {
