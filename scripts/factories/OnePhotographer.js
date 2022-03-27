@@ -4,6 +4,8 @@ export default class OnePhotographer {
         this.filterSelect = document.getElementById("sort");
         this.divTotalLikes = document.getElementById("js-totalLike");
         this.divPrice = document.getElementById("js-price");
+        this.lightbox = document.getElementsByClassName("lightbox")[0];
+        this.closeLightboxBtn = document.getElementsByClassName("js-closeLightbox")[0];
         this.arrayPhotographers, this.arrayMedia, this.newArrMedia = [];
         this.photographer = "";
         this.totalOfLikes = 0;
@@ -18,13 +20,29 @@ export default class OnePhotographer {
         this.getMedias = () => this._getMedias();
         this.getFilterType = (e) => this._getFilterType(e);
         this.likePhoto = (e) => this._likePhoto(e);
+        this.openLightbox = (e) => this._openLightbox(e);
+        this.closeLightbox = (e) => this._closeLightbox(e);
 
         this.bindEvent();
         this.getPhotographers();
     }
 
     bindEvent() {
+        console.log(this.closeLightboxBtn);
         this.filterSelect.addEventListener("change", this.getFilterType);
+
+        if (this.closeLightboxBtn) {
+            this.closeLightboxBtn.addEventListener("click", this._closeLightbox());
+        }
+    }
+
+    _openLightbox(e) {
+        this.lightbox.classList.remove("hide");
+        this.lightbox.classList.add("show");
+    }
+    _closeLightbox(e) {
+        this.lightbox.classList.add("hide");
+        this.lightbox.classList.remove("show");
     }
 
     _getFilterType(e) {
@@ -165,9 +183,9 @@ export default class OnePhotographer {
             const card = document.createElement("div");
             card.classList.add("card");
             card.innerHTML = `
-                <a class="card__img" href="#">
+                <div class="card__img js-openLightbox">
                     ${this.videosOrPicture(item, card)}
-                </a>
+                </div>
                 <div class="card__overlay">
                     <h3 class="card__title">${item.title}</h3>
                     <div class="card__likes">
@@ -190,6 +208,12 @@ export default class OnePhotographer {
 
         for (const likePhoto of likePhotos) {
             likePhoto.addEventListener("click", this.likePhoto);
+        }
+
+        const lightboxOpenButton = document.getElementsByClassName("js-openLightbox");
+
+        for (const button of lightboxOpenButton) {
+            button.addEventListener("click", this.openLightbox);
         }
     }
 

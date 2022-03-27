@@ -151,12 +151,14 @@ body,
 .gallery .card .card__title {
   font-size: 24px;
   font-weight: 599;
+  margin-right: 10px;
   color: #901c1c;
 }
 
 .gallery .card .card__likes {
   display: flex;
   justify-content: end;
+  height: 100%;
 }
 
 .gallery .card .card__likes .js-photoLike {
@@ -296,6 +298,102 @@ form input {
   border-radius: 5px;
 }
 
+.lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.911);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  /* display: none */
+  transition: opacity 0.5s ease-in-out, z-index 0.5s ease-in-out;
+}
+.lightbox.show {
+  opacity: 1;
+  z-index: 10;
+}
+
+.lightbox.hide {
+  opacity: 0;
+  z-index: -10;
+}
+
+.lightbox .lightbox__container {
+  position: relative;
+  width: 90vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90%;
+}
+
+.lightbox .wrap-content {
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  padding-top: 20px;
+  flex-direction: column;
+  animation: lightboxIn 0.5s;
+}
+
+.lightbox .lightbox__next,
+.lightbox__prev {
+  background: url(../assets/images/arrow.svg) center center / 100% 100%;
+  height: 50px;
+  max-width: 20px;
+  position: absolute;
+  top: 45%;
+  right: -25%;
+  margin-top: -15px;
+  z-index: 11;
+  opacity: 0.8;
+  text-indent: -3000px;
+  transition: 0.3s;
+  padding: 0 10%;
+}
+
+.lightbox .lightbox__next:hover,
+.lightbox__prev:hover {
+  opacity: 1;
+}
+
+.lightbox .lightbox__next {
+  position: absolute;
+  right: auto;
+  left: -25%;
+  transform: rotate(180deg);
+}
+.lightbox .lightbox__close {
+  border: none;
+  width: 35px;
+  height: 35px;
+  background: url(../assets/images/close.svg) center center / 100% 100%;
+  text-indent: -3000px;
+  cursor: pointer;
+  position: absolute;
+  top: -2%;
+  right: -20%;
+}
+
+.lightbox .lightbox__title {
+  color: #901c1c;
+  margin-top: 10px;
+  width: 100%;
+  text-align: left;
+  font-size: 20px;
+}
+
+.lightbox img {
+  object-fit: contain;
+  max-height: 100%;
+}
+
 /* ============== Responsive 1024 px ============== */
 @media screen and (max-width: 1024px) {
   .photograph-header {
@@ -318,6 +416,15 @@ form input {
 
   .container-gallery .gallery {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@keyframes lightboxIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 
