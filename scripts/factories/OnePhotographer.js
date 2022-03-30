@@ -64,22 +64,23 @@ export default class OnePhotographer {
             if (i == 0) {
                 i = this.newArrMedia.length;
             }
-            this.divImgVideoLightbox.innerHTML = "";
             this.divImgVideoLightbox.innerHTML = `${this.videosOrPicture(this.newArrMedia[i - 1], this.divImgVideoLightbox)}`;
             this.lightboxTitle.textContent = this.newArrMedia[i - 1].title;
             i--;
         });
     }
 
-    findIndex(e, array) {
+    async findIndex(e, array) {
         this.id = e.target.getAttribute("id");
         const lightboxTitleValue = e.currentTarget.parentNode.children[1].children[0].innerText;
         this.lightboxTitle.textContent = lightboxTitleValue;
         console.log(e);
 
-        array.findIndex(element => {
+        this.divImgVideoLightbox.innerHTML = "<div class='lightbox__loader'></div>";
+        await array.findIndex(element => {
             element.id === this.id;
             console.log(array[this.indexOfImgLightbox]);
+
             this.divImgVideoLightbox.innerHTML = `${this.videosOrPicture(array[this.indexOfImgLightbox], this.divImgVideoLightbox)}`;
             // console.log();
             // array[];
@@ -87,7 +88,6 @@ export default class OnePhotographer {
             if (element.id == this.id) {
                 this.indexOfImgLightbox = array.indexOf(element);
                 // this.lightboxTitle.textContent = element.title;
-                const video = document.getElementById(`${this.id}`);
                 // this.divImgVideoLightbox.children[0].setAttribute("controls", true);
                 console.log(this.divImgVideoLightbox.innerHTML);
                 console.log(this.indexOfImgLightbox);
@@ -155,7 +155,7 @@ export default class OnePhotographer {
         this.displayDataGallery(this.newArrMedia);
     }
 
-    filterTypeMedia(type, e) {
+    filterTypeMedia(type) {
         let filterMedia = [];
         if (type == "popularite") {
             this.newArrMedia.sort((a, b) => b.likes - a.likes);
@@ -215,6 +215,7 @@ export default class OnePhotographer {
     }
 
     videosOrPicture = (item) => {
+        const image = new Image;
         if (item.video) {
             const divVideo = `
                 <video id="${item.id}">
