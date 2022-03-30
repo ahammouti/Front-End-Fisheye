@@ -6,10 +6,21 @@ export default class OnePhotographer {
         this.divPrice = document.getElementById("js-price");
         this.lightbox = document.getElementsByClassName("lightbox")[0];
         this.closeLightboxBtn = document.getElementsByClassName("js-closeLightbox")[0];
+        this.imgLightbox = document.getElementById("js-imgLightbox");
+        this.divImgVideoLightbox = document.getElementsByClassName("js-divImgVideoLightbox")[0];
+        this.lightboxTitle = document.getElementsByClassName("js-lightboxTitle")[0];
+        this.nextBtnLightbox = document.getElementsByClassName("js-nextBtnLightbox")[0];
+        this.prevBtnLightbox = document.getElementsByClassName("js-prevBtnLightbox")[0];
+
         this.arrayPhotographers, this.arrayMedia, this.newArrMedia = [];
         this.photographer = "";
+
         this.totalOfLikes = 0;
         this.parseTotal = 0;
+
+        this.lightboxElement = [];
+        this.indexOfImgLightbox = 0;
+        this.id = "";
 
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -32,15 +43,66 @@ export default class OnePhotographer {
         this.filterSelect.addEventListener("change", this.getFilterType);
 
         if (this.closeLightboxBtn) {
-            this.closeLightboxBtn.addEventListener("click", this._closeLightbox());
+            this.closeLightboxBtn.addEventListener("click", this.closeLightbox);
         }
+    }
+
+    handleNavigateLightbox(i) {
+        this.nextBtnLightbox.addEventListener("click", (e) => {
+            e.preventDefault();
+
+            if (i == this.newArrMedia.length - 1) {
+                i = -1;
+            }
+            this.divImgVideoLightbox.innerHTML = "";
+            this.divImgVideoLightbox.innerHTML = `${this.videosOrPicture(this.newArrMedia[i + 1])}`;
+            this.lightboxTitle.textContent = this.newArrMedia[i + 1].title;
+            i++;
+        });
+        this.prevBtnLightbox.addEventListener("click", (e) => {
+            e.preventDefault();
+            if (i == 0) {
+                i = this.newArrMedia.length;
+            }
+            this.divImgVideoLightbox.innerHTML = "";
+            this.divImgVideoLightbox.innerHTML = `${this.videosOrPicture(this.newArrMedia[i - 1], this.divImgVideoLightbox)}`;
+            this.lightboxTitle.textContent = this.newArrMedia[i - 1].title;
+            i--;
+        });
+    }
+
+    findIndex(e, array) {
+        this.id = e.target.getAttribute("id");
+        const lightboxTitleValue = e.currentTarget.parentNode.children[1].children[0].innerText;
+        this.lightboxTitle.textContent = lightboxTitleValue;
+        console.log(e);
+
+        array.findIndex(element => {
+            element.id === this.id;
+            console.log(array[this.indexOfImgLightbox]);
+            this.divImgVideoLightbox.innerHTML = `${this.videosOrPicture(array[this.indexOfImgLightbox], this.divImgVideoLightbox)}`;
+            // console.log();
+            // array[];
+            // array.push(element);
+            if (element.id == this.id) {
+                this.indexOfImgLightbox = array.indexOf(element);
+                // this.lightboxTitle.textContent = element.title;
+                const video = document.getElementById(`${this.id}`);
+                // this.divImgVideoLightbox.children[0].setAttribute("controls", true);
+                console.log(this.divImgVideoLightbox.innerHTML);
+                console.log(this.indexOfImgLightbox);
+            }
+        });
+        console.log(array);
     }
 
     _openLightbox(e) {
         this.lightbox.classList.remove("hide");
         this.lightbox.classList.add("show");
+        this.findIndex(e, this.newArrMedia);
+        this.handleNavigateLightbox(this.indexOfImgLightbox);
     }
-    _closeLightbox(e) {
+    _closeLightbox() {
         this.lightbox.classList.add("hide");
         this.lightbox.classList.remove("show");
     }
@@ -90,18 +152,16 @@ export default class OnePhotographer {
         this.divTotalLikes.textContent = this.totalOfLikes;
         this.parseTotal = parseInt(this.divTotalLikes.textContent);
         this.divPrice.textContent = this.photographer.price + "€ / jour";
-
         this.displayDataGallery(this.newArrMedia);
     }
 
-    filterTypeMedia(type) {
+    filterTypeMedia(type, e) {
         let filterMedia = [];
         if (type == "popularite") {
             this.newArrMedia.sort((a, b) => b.likes - a.likes);
             filterMedia.push(this.newArrMedia);
             this.divTotalLikes.textContent = this.totalOfLikes;
             this.parseTotal = parseInt(this.divTotalLikes.textContent);
-
             this.displayDataGallery(filterMedia[0]);
         }
         else if (type == "date") {
@@ -137,6 +197,10 @@ export default class OnePhotographer {
         }
     }
 
+    filterArrLightbox() {
+        console.log(this.lightboxElement);
+    }
+
     displayDataPagePhotographer(photographer) {
         const photographerName = document.getElementById("js-photographerName");
         const location = document.getElementById("js-location");
@@ -150,27 +214,29 @@ export default class OnePhotographer {
         profilePicture.setAttribute("alt", `${photographer.name}`);
     }
 
-    videosOrPicture = (item, card) => {
+    videosOrPicture = (item) => {
         if (item.video) {
-            card.addEventListener("mouseover", () => {
-                let video = document.getElementsByTagName("video")[0];
-                video.setAttribute("controls", true);
-            });
-            card.addEventListener("mouseleave", () => {
-                let video = document.getElementsByTagName("video")[0];
-                video.removeAttribute("controls");
-            });
-            return `
-                <video>
-                    <source
-                    src="./assets/samplePhotos/${item.photographerId}/${item.video}"
-                    type="video/mp4">
+            const divVideo = `
+                <video id="${item.id}">
+                <source
+                src="./assets/samplePhotos/${item.photographerId}/${item.video}"
+                type="video/mp4">
                 </video>
             `;
+            // card.addEventListener("mouseover", () => {
+            //     let video = document.getElementsByTagName("video")[0];
+            //     video.setAttribute("controls", "true");
+            // });
+            // card.addEventListener("mouseleave", () => {
+            //     let video = document.getElementsByTagName("video")[0];
+            //     video.removeAttribute("controls");
+            // });
+            // card.innerHTML = "";
+            return divVideo;
         }
         else {
             return `
-                <img src="./assets/samplePhotos/${this.photographer.id}/${item.image}" alt="${item.title}" />
+                <img src="./assets/samplePhotos/${this.photographer.id}/${item.image}" alt="${item.title}" id="${item.id}" />
             `;
         }
     };
