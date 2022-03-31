@@ -12,6 +12,7 @@ export default class OnePhotographer {
         this.lightboxTitle = document.getElementsByClassName("js-lightboxTitle")[0];
         this.nextBtnLightbox = document.getElementsByClassName("js-nextBtnLightbox")[0];
         this.prevBtnLightbox = document.getElementsByClassName("js-prevBtnLightbox")[0];
+        this.video = document.getElementsByClassName("js-video")[1];
 
         this.arrayPhotographers, this.arrayMedia, this.newArrMedia = [];
         this.photographer = "";
@@ -25,6 +26,8 @@ export default class OnePhotographer {
 
         const urlParams = new URLSearchParams(window.location.search);
         this.idPhotographer = urlParams.get("id");
+        this.iDirection = "";
+
 
         // feinte
         this.getPhotographers = (e) => this._getPhotographers(e);
@@ -33,6 +36,7 @@ export default class OnePhotographer {
         this.likePhoto = (e) => this._likePhoto(e);
         this.openLightbox = (e) => this._openLightbox(e);
         this.closeLightbox = (e) => this._closeLightbox(e);
+        this.handleNavigateLightbox = (e) => this._handleNavigateLightbox(e);
 
         this.onKeyUp = this.onKeyUp.bind(this);
         document.addEventListener("keyup", this.onKeyUp);
@@ -46,11 +50,18 @@ export default class OnePhotographer {
         if (this.closeLightboxBtn) {
             this.closeLightboxBtn.addEventListener("click", this.closeLightbox);
         }
+        if (this.nextBtnLightbox) {
+            this.nextBtnLightbox.addEventListener("click", this.handleNavigateLightbox);
+        }
+        if (this.nextBtnLightbox) {
+            this.prevBtnLightbox.addEventListener("click", this.handleNavigateLightbox);
+        }
     }
 
     /**
      * 
      * @param {KeyboardEvent} e 
+     * Fermer la lightbox avec Echap
      */
     onKeyUp(e) {
         if (e.key === "Escape") {
@@ -58,57 +69,48 @@ export default class OnePhotographer {
         }
     }
 
-    handleNavigateLightbox(i) {
-        this.nextBtnLightbox.addEventListener("click", (e) => {
-            e.preventDefault();
-
-            if (i == this.newArrMedia.length - 1) {
-                i = -1;
+    _handleNavigateLightbox(e) {
+        e.preventDefault();
+        let direction = e.target.dataset.direction;
+        if (direction == "next") {
+            this.iDirection = 1;
+            if (this.indexOfImgLightbox == this.newArrMedia.length - 1) {
+                this.indexOfImgLightbox = -1;
             }
-
-            this.divImgVideoLightbox.innerHTML = "";
-            this.divImgVideoLightbox.innerHTML = `${this.videosOrPicture(this.newArrMedia[i + 1])}`;
-            this.lightboxTitle.textContent = this.newArrMedia[i + 1].title;
-            this.handleControlsVideo(this.newArrMedia, i + 1);
-            i++;
-        });
-        this.prevBtnLightbox.addEventListener("click", (e) => {
-            e.preventDefault();
-
-            if (i == 0) {
-                i = this.newArrMedia.length;
+        }
+        else if (direction == "prev") {
+            this.iDirection = (-1);
+            if (this.indexOfImgLightbox == 0) {
+                this.indexOfImgLightbox = this.newArrMedia.length;
             }
-
-            this.divImgVideoLightbox.innerHTML = `${this.videosOrPicture(this.newArrMedia[i - 1], this.divImgVideoLightbox)}`;
-            this.lightboxTitle.textContent = this.newArrMedia[i - 1].title;
-            this.handleControlsVideo(this.newArrMedia, i - 1);
-            i--;
-        });
+        }
+        this.divImgVideoLightbox.innerHTML = "";
+        this.divImgVideoLightbox.innerHTML = `${this.videosOrPicture(this.newArrMedia[this.indexOfImgLightbox + this.iDirection])}`;
+        this.lightboxTitle.textContent = this.newArrMedia[this.indexOfImgLightbox + this.iDirection].title;
+        this.handleControlsVideo(this.newArrMedia, this.indexOfImgLightbox + this.iDirection);
+        this.indexOfImgLightbox += this.iDirection;
     }
 
     findIndex(e, array) {
         this.id = e.target.getAttribute("id");
         const lightboxTitleValue = e.currentTarget.parentNode.children[1].children[0].innerText;
         const image = new Image();
-
         this.lightboxTitle.textContent = lightboxTitleValue;
         this.divImgVideoLightbox.innerHTML = "<div class='lightbox__loader'></div>";
-
         array.findIndex(element => {
             const loader = document.getElementsByClassName("lightbox__loader")[0];
             element.id === this.id;
-
-            image.onload = () => {
-                loader.parentElement.removeChild(loader);
-                this.divImgVideoLightbox.innerHTML = `${this.videosOrPicture(array[this.indexOfImgLightbox], this.divImgVideoLightbox)}`;
-                this.handleControlsVideo(array, this.indexOfImgLightbox);
-            };
-            image.src = `./assets/samplePhotos/${this.photographer.id}/${element.image}`;
-
-
+            // image.onload = () => {
+            //     // loader.parentElement.removeChild(loader);
+            // };
             if (element.id == this.id) {
                 this.indexOfImgLightbox = array.indexOf(element);
+                console.log(array[this.indexOfImgLightbox]);
+                console.log(this.indexOfImgLightbox);
             }
+            this.divImgVideoLightbox.innerHTML = `${this.videosOrPicture(array[this.indexOfImgLightbox])}`;
+            this.handleControlsVideo(array, this.indexOfImgLightbox);
+            // image.src = `./assets/samplePhotos/${this.photographer.id}/${element.image}`;
         });
     }
 
@@ -123,15 +125,18 @@ export default class OnePhotographer {
         this.lightbox.classList.remove("hide");
         this.lightbox.classList.add("show");
         this.findIndex(e, this.newArrMedia);
-        this.handleNavigateLightbox(this.indexOfImgLightbox);
+        // this.handleNavigateLightbox(this.indexOfImgLightbox);
     }
     _closeLightbox(e) {
         e.preventDefault;
-        const divRemoveLightbox = document.getElementsByClassName("wrapper__lightbox")[0];
+        const divRemoveLightbox = document.getElementsByClassName("lightbox__container")[0];
         this.lightbox.classList.add("hide");
         this.lightbox.classList.remove("show");
         // if (this.lightbox.classList.contains("hide")) {
-        //     divRemoveLightbox.removeChild(this.lightbox);
+        //     this.lightbox.removeChild(divRemoveLightbox);
+        // }
+        // else {
+        //     return "";
         // }
         document.removeEventListener("keyup", this.onKeyUp);
     }
@@ -159,7 +164,6 @@ export default class OnePhotographer {
         this.arrayPhotographers.photographers.filter(e => {
             if (this.idPhotographer == e.id) {
                 this.photographer = e;
-
                 this.displayDataPagePhotographer(this.photographer);
             }
         });
@@ -219,7 +223,6 @@ export default class OnePhotographer {
                 return 0;
             });
             filterMedia.push(this.newArrMedia);
-
             this.divTotalLikes.textContent = this.totalOfLikes;
             this.parseTotal = parseInt(this.divTotalLikes.textContent);
             this.displayDataGallery(filterMedia[0]);
@@ -246,7 +249,7 @@ export default class OnePhotographer {
     videosOrPicture = (item) => {
         if (item.video) {
             const divVideo = `
-                <video class="js-video" id="${item.id}">
+                <video data-controls="false" class="js-video" id="${item.id}">
                 <source
                 src="./assets/samplePhotos/${item.photographerId}/${item.video}"
                 type="video/mp4">
