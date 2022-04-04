@@ -36,10 +36,9 @@ export default class OnePhotographer {
         this.likePhoto = (e) => this._likePhoto(e);
         this.openLightbox = (e) => this._openLightbox(e);
         this.closeLightbox = (e) => this._closeLightbox(e);
-        this.handleNavigateLightbox = (e) => this._handleNavigateLightbox(e);
+        this.handleNavigateLightbox = (e, direction) => this._handleNavigateLightbox(e, direction);
 
         this.onKeyUp = this.onKeyUp.bind(this);
-        document.addEventListener("keyup", this.onKeyUp);
 
         this.bindEvent();
         this.getPhotographers();
@@ -67,20 +66,74 @@ export default class OnePhotographer {
         if (e.key === "Escape") {
             this.closeLightbox(e);
         }
+
+        else if (e.key === "ArrowLeft") {
+            let callBack = (callback) => {
+                this.iDirection = -1;
+                if (this.indexOfImgLightbox === 0) {
+                    this.indexOfImgLightbox = this.newArrMedia.length;
+                }
+                callback(e, "prev");
+            };
+            callBack(this.handleNavigateLightbox);
+        }
+        else if (e.key === "ArrowRight") {
+            let callBack = (callback) => {
+                this.iDirection = 1;
+                if (this.indexOfImgLightbox === this.newArrMedia.length - 1) {
+                    this.indexOfImgLightbox = -1;
+                }
+                callback(e, "next");
+            };
+            callBack(this.handleNavigateLightbox);
+        }
+        const focusableElements = "button, button, button [tabindex]:not([tabindex='-1'])";
+        const modal = document.querySelector("#modal-lightbox");
+
+        const firstFocusableElement = modal.querySelectorAll(focusableElements)[0]; // get first element to be focused inside modal
+        const focusableContent = modal.querySelectorAll(focusableElements);
+        const lastFocusableElement = focusableContent[focusableContent.length - 1]; // get last element to be focused inside modal
+
+        let isTabPressed = e.key === "Tab" || e.keyCode === 9;
+
+        if (!isTabPressed) {
+            return;
+        }
+
+        if (document.activeElement === firstFocusableElement) {
+            e.preventDefault();
+            focusableContent[0].focus(); // add focus for the last focusable element
+        }
+        else if (document.activeElement === focusableContent[1]) { // if focused has reached to last focusable element then focus first focusable element after pressing tab
+            // firstFocusableElement.focus(); // add focus for the first focusable element
+            e.preventDefault();
+            focusableContent[1].focus();
+        }
+        else if (document.activeElement === focusableContent[2]) {
+            e.preventDefault;
+            focusableContent[2].focus();
+
+        }
+        else {
+            e.preventDefault;
+            focusableContent[0].focus();
+        }
+        console.log(focusableContent);
     }
 
-    _handleNavigateLightbox(e) {
+    _handleNavigateLightbox(e, direction) {
         e.preventDefault();
-        let direction = e.target.dataset.direction;
-        if (direction == "next") {
+        this.direction = e.target.dataset.direction;
+        direction = this.direction;
+        if (direction === "next") {
             this.iDirection = 1;
-            if (this.indexOfImgLightbox == this.newArrMedia.length - 1) {
+            if (this.indexOfImgLightbox === this.newArrMedia.length - 1) {
                 this.indexOfImgLightbox = -1;
             }
         }
-        else if (direction == "prev") {
+        else if (direction === "prev") {
             this.iDirection = (-1);
-            if (this.indexOfImgLightbox == 0) {
+            if (this.indexOfImgLightbox === 0) {
                 this.indexOfImgLightbox = this.newArrMedia.length;
             }
         }
@@ -105,8 +158,6 @@ export default class OnePhotographer {
             // };
             if (element.id == this.id) {
                 this.indexOfImgLightbox = array.indexOf(element);
-                console.log(array[this.indexOfImgLightbox]);
-                console.log(this.indexOfImgLightbox);
             }
             this.divImgVideoLightbox.innerHTML = `${this.videosOrPicture(array[this.indexOfImgLightbox])}`;
             this.handleControlsVideo(array, this.indexOfImgLightbox);
@@ -125,8 +176,13 @@ export default class OnePhotographer {
         this.lightbox.classList.remove("hide");
         this.lightbox.classList.add("show");
         this.findIndex(e, this.newArrMedia);
-        // this.handleNavigateLightbox(this.indexOfImgLightbox);
+        document.addEventListener("keyup", this.onKeyUp);
     }
+
+    /**
+     * @param {MouseEvent|KeyboardEvent} e 
+     * Ferme la lightbox
+     */
     _closeLightbox(e) {
         e.preventDefault;
         const divRemoveLightbox = document.getElementsByClassName("lightbox__container")[0];
@@ -150,16 +206,17 @@ export default class OnePhotographer {
         const response = await fetch("data/photographers.json");
         if (response.status === 200) {
             const res = await response.json();
-
-            // enregistrement du tableau fetch
-            this.arrayPhotographers = res;
+            this.arrayPhotographers = res; // enregistrement du tableau fetch
 
             this.filterPhotographer();
             this.filterMedia();
         }
     }
 
-    // filtrage du tableau this.arrayPhotographer
+    /**
+     * @function filterPhotographer()
+     * Méthode qui filtre les photographe et affiche seulement le photographe qui correspond à son id url
+     */
     filterPhotographer() {
         this.arrayPhotographers.photographers.filter(e => {
             if (this.idPhotographer == e.id) {
@@ -249,7 +306,7 @@ export default class OnePhotographer {
     videosOrPicture = (item) => {
         if (item.video) {
             const divVideo = `
-                <video data-controls="false" class="js-video" id="${item.id}">
+                <video tabindex="0" data-controls="false" class="js-video" id="${item.id}">
                 <source
                 src="./assets/samplePhotos/${item.photographerId}/${item.video}"
                 type="video/mp4">
@@ -259,7 +316,7 @@ export default class OnePhotographer {
         }
         else {
             return `
-                <img src="./assets/samplePhotos/${this.photographer.id}/${item.image}" alt="${item.title}" id="${item.id}" />
+                <img tabindex="0" role="img" src="./assets/samplePhotos/${this.photographer.id}/${item.image}" alt="${item.title}" id="${item.id}" />
             `;
         }
     };
@@ -278,15 +335,15 @@ export default class OnePhotographer {
                 <div class="card__overlay">
                     <h3 class="card__title">${item.title}</h3>
                     <div class="card__likes">
-                        <div class="js-photoLike" data-isliked=false>
-                            <p class="like">${item.likes}</p>
+                        <button tabindex="0" class="js-photoLike" data-isliked=false>
+                            <span class="like">${item.likes}</span>
                             <div class="heart">
                                 <i class="far fa-heart"></i>
                                 <span class="js-heartSolid">
                                     <i class="fas fa-heart"></i>
                                 </span>
                             </div>
-                        </div>
+                        </button>
                     </div>
                 </div>
             `;

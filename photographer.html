@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="fr">
 
 <head>
@@ -28,13 +29,13 @@
           <p id="js-tagline" class="tagline"></p>
         </div>
         <button class="contact_button" onclick="displayModal()">Contactez-moi</button>
-        <img alt="" id="js-profilePicture" />
+        <img src="" alt="" id="js-profilePicture" />
       </section>
     </header>
     <section class="container-gallery">
       <section class="section-sort">
-        <label for="sort-select">Trier par</label>
-        <select name="sort-select" id="sort">
+        <label for="sort">Trier par</label>
+        <select name="sort" id="sort">
           <option selected value="popularite">
             Popularité
           </option>
@@ -75,17 +76,15 @@
       </form>
     </div>
   </div>
-  <div class="wrapper__lightbox">
-    <div class="lightbox hide">
-      <div class="lightbox__container">
-        <div class="wrap-content">
-          <button class="lightbox__close js-closeLightbox">close dialog</button>
-          <div class="lightbox__next js-prevBtnLightbox" data-direction="prev">Previous image</div>
-          <div class="lightbox__prev js-nextBtnLightbox" data-direction="next">Next image</div>
-          <div class="wrap-imgVideoLightbox js-divImgVideoLightbox">
-          </div>
-          <h4 class="lightbox__title js-lightboxTitle"></h4>
+  <div class="lightbox hide" tabindex="-1" aria-label="image closeup view" role="dialog" id="modal-lightbox">
+    <div class="lightbox__container">
+      <div class="wrap-content">
+        <button class="lightbox__close js-closeLightbox" type="button" aria-label="Close dialog">close dialog</button>
+        <button class="lightbox__next js-prevBtnLightbox" type="button" data-direction="prev">Previous image</button>
+        <button class="lightbox__prev js-nextBtnLightbox" type="button" data-direction="next">Next image</button>
+        <div class="wrap-imgVideoLightbox js-divImgVideoLightbox">
         </div>
+        <h4 class="lightbox__title js-lightboxTitle"></h4>
       </div>
     </div>
   </div>
