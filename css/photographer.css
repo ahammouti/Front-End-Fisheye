@@ -8,6 +8,11 @@ body,
   overflow-x: hidden;
 }
 
+button {
+  border: none;
+  background-color: #fff;
+}
+
 #contact_modal {
   display: none;
 }
@@ -173,6 +178,7 @@ body,
 .gallery .card .card__likes .js-photoLike .like {
   display: flex;
   margin: 0;
+  font-size: initial;
   color: #901c1c;
   font-weight: bold;
 }
