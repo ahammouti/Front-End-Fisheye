@@ -290,16 +290,18 @@ export default class OnePhotographer {
     }
 
     displayDataPagePhotographer(photographer) {
+        const wrapHeader = document.getElementById("js-wrapHeader");
         const photographerName = document.getElementById("js-photographerName");
         const location = document.getElementById("js-location");
         const tagline = document.getElementById("js-tagline");
-        const profilePicture = document.getElementById("js-profilePicture");
+        const profilePicture = document.createElement("img");
 
         photographerName.textContent = `${photographer.name}`;
         location.textContent = `${photographer.city}, ${photographer.country}`;
         tagline.textContent = `${photographer.tagline}`;
-        profilePicture.src = `./assets/samplePhotos/Photographers_ID_Photos/${photographer.portrait}`;
         profilePicture.setAttribute("alt", `${photographer.name}`);
+        profilePicture.src = `./assets/samplePhotos/Photographers_ID_Photos/${photographer.portrait}`;
+        wrapHeader.appendChild(profilePicture);
     }
 
     videosOrPicture = (item) => {
