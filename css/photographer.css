@@ -173,6 +173,7 @@ button {
   text-align: right;
   margin-top: 30px;
   cursor: pointer;
+  margin-right: 9px;
 }
 
 .gallery .card .card__likes .js-photoLike .like {
