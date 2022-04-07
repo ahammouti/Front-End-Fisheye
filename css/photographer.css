@@ -173,7 +173,6 @@ button {
   text-align: right;
   margin-top: 30px;
   cursor: pointer;
-  margin-right: 9px;
 }
 
 .gallery .card .card__likes .js-photoLike .like {
@@ -249,8 +248,8 @@ button {
   font-size: 18px;
 }
 
-.total-likes .container-totalLikes span {
-  margin-left: 10px;
+.total-likes .container-totalLikes p {
+  padding-right: 9px;
 }
 
 .modal {
@@ -318,7 +317,6 @@ form input {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  /* display: none */
   transition: opacity 0.5s ease-in-out, z-index 0.5s ease-in-out;
 }
 .lightbox .lightbox__loader {
@@ -340,6 +338,7 @@ form input {
 
 .lightbox.hide {
   opacity: 0;
+  /* display: none; */
   z-index: -10;
 }
 
