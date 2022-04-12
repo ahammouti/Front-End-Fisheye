@@ -14,78 +14,105 @@
 </head>
 
 <body>
-  <script src="/scripts/utils/contactForm.js"></script>
-  <header>
-    <a href="./index.html" aria-label="Retour à la page d'accueil">
-      <img src="assets/images/logo.png" alt="Fisheye Home page" class="logo" />
-    </a>
-  </header>
-  <main id="main">
-    <header class="photograph-header">
-      <section class="wrap-header" id="js-wrapHeader">
-        <div class="left">
-          <h2 id="js-photographerName" class="photographerName"></h2>
-          <p id="js-location" class="location"></p>
-          <p id="js-tagline" class="tagline"></p>
-        </div>
-        <button class="contact_button" onclick="displayModal()">Contactez-moi</button>
-      </section>
+  <div class="container">
+    <header>
+      <a href="./index.html" aria-label="Retour à la page d'accueil">
+        <img src="assets/images/logo.png" alt="Fisheye Home page" class="logo" />
+      </a>
     </header>
-    <section class="container-gallery">
-      <section class="section-sort">
-        <label for="sort">Trier par</label>
-        <select name="sort" id="sort">
-          <option selected value="popularite">
-            Popularité
-          </option>
-          <option value="date">
-            Date
-          </option>
-          <option value="Titre">
-            Titre
-          </option>
-        </select>
-      </section>
-      <section class="gallery">
-        <div class="card js-openLightbox"></div>
-      </section>
-    </section>
-    <section class="total-likes">
-      <div class="container-totalLikes">
-        <p id="js-totalLike"></p>
-        <span class="fas fa-heart"></span>
-      </div>
-      <p id="js-price"></p>
-    </section>
-  </main>
-  <div id="contact_modal">
-    <div class="modal">
-      <header>
-        <h3>Contactez-moi</h3>
-        <img alt="close dialog" src="assets/icons/close.svg" onclick="closeModal()" />
+    <main id="main">
+      <header class="photograph-header">
+        <section class="wrap-header" id="js-wrapHeader">
+          <div class="left">
+            <h2 id="js-photographerName" class="photographerName"></h2>
+            <p id="js-location" class="location"></p>
+            <p id="js-tagline" class="tagline"></p>
+          </div>
+          <button class="contact_button js-btnContact">Contactez-moi</button>
+        </section>
       </header>
-      <form>
-        <div>
-          <label>Prénom</label>
-          <!-- <input /> -->
+      <section class="container-gallery">
+        <section class="section-sort">
+          <label for="sort">Trier par</label>
+          <select name="sort" id="sort">
+            <option selected value="popularite">
+              Popularité
+            </option>
+            <option value="date">
+              Date
+            </option>
+            <option value="Titre">
+              Titre
+            </option>
+          </select>
+        </section>
+        <section class="gallery">
+          <div class="card js-openLightbox"></div>
+        </section>
+      </section>
+      <section class="total-likes">
+        <div class="container-totalLikes">
+          <p id="js-totalLike"></p>
+          <span class="fas fa-heart"></span>
         </div>
-        <button class="contact_button">Envoyer</button>
-      </form>
+        <p id="js-price"></p>
+      </section>
+    </main>
+    <div class="bground">
+      <div tabindex="0" class="content js-dialog">
+        <div tabindex="4" aria-label="close Contact form" class="close"></div>
+        <div class="modal-body">
+          <h1 class="title-contact js-titleContact"></h1>
+          <form class="form" name="reserve" action="index.html" method="get">
+            <div class="formData">
+              <label for="first">Prénom</label>
+              <input aria-labelledby="First name" tabindex="4" class="text-control" type="text" id="first"
+                name="first" />
+              <small id="err-first-name">Veuillez entrer 2 caractères ou plus pour le champ du prénom.</small>
+            </div>
+            <div class="formData">
+              <label aria-labelledby="Last name" for="last">Nom</label>
+              <input tabindex="4" class="text-control" type="text" id="last" name="last" />
+              <small id="err-last-name">Veuillez entrer 2 caractères ou plus pour le champ du nom.</small>
+            </div>
+            <div class="formData">
+              <label for="email">E-mail</label>
+              <input aria-labelledby="Email" tabindex="4" placeholder="example@example.com" class="text-control"
+                type="email" id="email" name="email" />
+              <small id="err-email">L'adresse électronique est invalide.</small>
+            </div>
+            <div class="formData">
+              <label for="msg">Votre message</label>
+              <textarea aria-labelledby="your message" class="text-control" tabindex="4" name="err-msg" id="msg-contact"
+                cols="30" rows="10"></textarea>
+              <small id="err-msg">Message trop court.</small>
+            </div>
+            <input aria-label="Send" tabindex="4" class="btn-submit" type="submit" value="Envoyez" />
+          </form>
+          <div id="modal-thanks">
+            <h3 class="js-titleModalThanks">Merci pour votre Message</h3>
+            <button class="btn-signup btn-close modal-btn">
+              Fermer
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="lightbox hide" tabindex="-1" aria-label="image closeup view" role="dialog" id="modal-lightbox">
-    <div class="lightbox__container">
-      <div class="wrap-content">
-        <button class="lightbox__close js-closeLightbox" type="button" aria-label="Close dialog">close dialog</button>
-        <button class="lightbox__next js-prevBtnLightbox" type="button" data-direction="prev">Previous image</button>
-        <button class="lightbox__prev js-nextBtnLightbox" type="button" data-direction="next">Next image</button>
-        <div class="wrap-imgVideoLightbox js-divImgVideoLightbox">
+    <div class="lightbox hide" tabindex="4" aria-label="image closeup view" role="dialog" id="modal-lightbox">
+      <div class="lightbox__container">
+        <div class="wrap-content">
+          <button class="lightbox__close js-closeLightbox" type="button" aria-label="Close dialog">close dialog</button>
+          <button class="lightbox__next js-prevBtnLightbox" type="button" data-direction="prev">Previous image</button>
+          <button class="lightbox__prev js-nextBtnLightbox" type="button" data-direction="next">Next image</button>
+          <div class="wrap-imgVideoLightbox js-divImgVideoLightbox">
+          </div>
+          <h4 class="lightbox__title js-lightboxTitle"></h4>
         </div>
-        <h4 class="lightbox__title js-lightboxTitle"></h4>
       </div>
     </div>
   </div>
   <script type="module" src="./scripts/pages/photographer.js"></script>
+  <script src="/scripts/utils/contactForm.js"></script>
 </body>
 
 </html>

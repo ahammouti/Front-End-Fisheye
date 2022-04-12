@@ -1,4 +1,3 @@
-"use strict";
 export default class OnePhotographer {
     constructor() {
         // init du tableau de fetch
@@ -14,6 +13,7 @@ export default class OnePhotographer {
         this.nextBtnLightbox = document.getElementsByClassName("js-nextBtnLightbox")[0];
         this.prevBtnLightbox = document.getElementsByClassName("js-prevBtnLightbox")[0];
         this.video = document.getElementsByClassName("js-video")[1];
+        this.titleContact = document.getElementsByClassName("js-titleContact")[0];
 
         this.arrayPhotographers, this.arrayMedia, this.newArrMedia = [];
         this.photographer = "";
@@ -29,8 +29,7 @@ export default class OnePhotographer {
         this.idPhotographer = urlParams.get("id");
         this.iDirection = "";
 
-
-        // feinte
+        // 
         this.getPhotographers = (e) => this._getPhotographers(e);
         this.getMedias = () => this._getMedias();
         this.getFilterType = (e) => this._getFilterType(e);
@@ -62,12 +61,11 @@ export default class OnePhotographer {
         }
 
         window.addEventListener("keyup", this.onKeyUpEnter);
-
     }
 
     /**
      * 
-     * @param {KeyboardEvent} e 
+     * @param {KeyboardEvent} e
      * Fermer la lightbox avec Echap
      */
     onKeyUp(e) {
@@ -154,7 +152,6 @@ export default class OnePhotographer {
         this.id = e.target.getAttribute("id");
         this.divImgVideoLightbox.innerHTML = "<div class='lightbox__loader'></div>";
         array.findIndex(element => {
-            const loader = document.getElementsByClassName("lightbox__loader")[0];
             element.id === this.id;
             if (element.id == this.id) {
                 this.indexOfImgLightbox = array.indexOf(element);
@@ -184,7 +181,6 @@ export default class OnePhotographer {
     _onKeyUpEnter(e) {
         for (const card of this.cards) {
             if (document.activeElement === card) {
-                console.log(document.activeElement);
                 if (e.key === "Enter") {
                     this.openLightbox(e);
                 }
@@ -198,7 +194,6 @@ export default class OnePhotographer {
      */
     _closeLightbox(e) {
         e.preventDefault;
-        const divRemoveLightbox = document.getElementsByClassName("lightbox__container")[0];
         this.lightbox.classList.add("hide");
         setTimeout(() => {
             this.lightbox.style.display = "none";
@@ -297,16 +292,13 @@ export default class OnePhotographer {
         }
     }
 
-    filterArrLightbox() {
-        console.log(this.lightboxElement);
-    }
-
     displayDataPagePhotographer(photographer) {
         const wrapHeader = document.getElementById("js-wrapHeader");
         const photographerName = document.getElementById("js-photographerName");
         const location = document.getElementById("js-location");
         const tagline = document.getElementById("js-tagline");
         const profilePicture = document.createElement("img");
+        const dialog = document.getElementsByClassName("js-dialog")[0];
 
         photographerName.textContent = `${photographer.name}`;
         location.textContent = `${photographer.city}, ${photographer.country}`;
@@ -314,6 +306,9 @@ export default class OnePhotographer {
         profilePicture.setAttribute("alt", `${photographer.name}`);
         profilePicture.src = `./assets/samplePhotos/Photographers_ID_Photos/${photographer.portrait}`;
         wrapHeader.appendChild(profilePicture);
+
+        this.titleContact.textContent = `Contactez-moi ${photographer.name}`;
+        dialog.setAttribute("aria-labelledby", `Contact me ${photographer.name}`);
     }
 
     videosOrPicture = (item) => {
@@ -349,7 +344,7 @@ export default class OnePhotographer {
                     <h3 class="card__title">${item.title}</h3>
                     <div class="card__likes">
                         <button tabindex="0" class="js-photoLike" data-isliked=false>
-                            <span class="like">${item.likes}</span>
+                            <span class="like">${item.likes}<p class="js-accessibilityText">like</p></span>
                             <span class="heart">
                                 <i class="far fa-heart"></i>
                                 <span class="js-heartSolid">
