@@ -43,7 +43,7 @@ export default class OnePhotographer {
 
         this.bindEvent();
 
-        this.getPhotographers();
+        window.addEventListener("load", this.getPhotographers);
     }
 
     bindEvent() {
@@ -208,15 +208,23 @@ export default class OnePhotographer {
         this.filterTypeMedia(type);
     }
 
-    async _getPhotographers() {
-        const response = await fetch("data/photographers.json");
-        if (response.status === 200) {
-            const res = await response.json();
-            this.arrayPhotographers = res; // enregistrement du tableau fetch
-
-            this.filterPhotographer();
-            this.filterMedia();
-        }
+    _getPhotographers() {
+        fetch("data/photographers.json")
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json();
+                }
+            })
+            .then(data => {
+                this.arrayPhotographers = data; // enregistrement du tableau fetch
+                this.filterPhotographer();
+                this.filterMedia();
+                const loaders = document.querySelectorAll(".js-loader");
+                loaders.forEach(loader => {
+                    console.log(loader);
+                    loader.className += " hidden";
+                });
+            });
     }
 
     /**
@@ -248,6 +256,7 @@ export default class OnePhotographer {
         this.divTotalLikes.textContent = this.totalOfLikes;
         this.parseTotal = parseInt(this.divTotalLikes.textContent);
         this.divPrice.textContent = this.photographer.price + "€ / jour";
+
         this.displayDataGallery(this.newArrMedia);
     }
 
@@ -307,8 +316,9 @@ export default class OnePhotographer {
         profilePicture.src = `./assets/samplePhotos/Photographers_ID_Photos/${photographer.portrait}`;
         wrapHeader.appendChild(profilePicture);
 
-        this.titleContact.textContent = `Contactez-moi ${photographer.name}`;
-        dialog.setAttribute("aria-labelledby", `Contact me ${photographer.name}`);
+        this.titleContact.setAttribute("id", `Contactez-moi-${photographer.name}`);
+        this.titleContact.textContent = `Contactez-moi-${photographer.name}`;
+        dialog.setAttribute("aria-labelledby", `Contact-me-${photographer.name}`);
     }
 
     videosOrPicture = (item) => {
@@ -324,6 +334,7 @@ export default class OnePhotographer {
         }
         else {
             return `
+                <div class="loader js-loader"></div>
                 <img tabindex="0" class="js-card" role="img" src="./assets/samplePhotos/${this.photographer.id}/${item.image}" alt="${item.title}" id="${item.id}" />
             `;
         }
@@ -358,6 +369,7 @@ export default class OnePhotographer {
             sectionGallery.appendChild(card);
 
         });
+
         const likePhotos = document.getElementsByClassName("js-photoLike");
 
         for (const likePhoto of likePhotos) {
