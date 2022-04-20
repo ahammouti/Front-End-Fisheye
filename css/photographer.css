@@ -778,6 +778,7 @@ form input {
   height: 50px;
   max-width: 20px;
   position: absolute;
+  cursor: pointer;
   top: 45%;
   right: -25%;
   margin: 0 3%;
