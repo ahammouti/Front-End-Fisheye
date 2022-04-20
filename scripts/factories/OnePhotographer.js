@@ -1,3 +1,4 @@
+"use strict";
 export default class OnePhotographer {
     constructor() {
         // init du tableau de fetch
@@ -26,12 +27,11 @@ export default class OnePhotographer {
         this.id = "";
 
         const urlParams = new URLSearchParams(window.location.search);
-        this.idPhotographer = urlParams.get("id");
+        this.idPhotographerUrl = urlParams.get("id");
         this.iDirection = "";
 
         // 
         this.getPhotographers = (e) => this._getPhotographers(e);
-        this.getMedias = () => this._getMedias();
         this.getFilterType = (e) => this._getFilterType(e);
         this.likePhoto = (e) => this._likePhoto(e);
         this.openLightbox = (e) => this._openLightbox(e);
@@ -43,13 +43,13 @@ export default class OnePhotographer {
 
         this.bindEvent();
 
-        window.addEventListener("load", this.getPhotographers);
+        window.addEventListener("load", this._getPhotographers());
     }
 
     bindEvent() {
         this.filterSelect.addEventListener("change", this.getFilterType);
 
-        // Evenements liés à la navigation dans la lightbox
+        /* Evenements liés à la navigation dans la lightbox */
         if (this.closeLightboxBtn) {
             this.closeLightboxBtn.addEventListener("click", this.closeLightbox);
         }
@@ -60,13 +60,12 @@ export default class OnePhotographer {
             this.prevBtnLightbox.addEventListener("click", this.handleNavigateLightbox);
         }
 
-        window.addEventListener("keyup", this.onKeyUpEnter);
+        window.addEventListener("keyup", this.onKeyUpEnter); // Evenement qui ecoute l'entrée au clavier du bouton "Enter" pour ouvrir la lightbox
     }
 
     /**
-     * 
      * @param {KeyboardEvent} e
-     * Fermer la lightbox avec Echap
+     * Gestion des keybords events au lancement de la lightbox
      */
     onKeyUp(e) {
         if (e.key === "Escape") {
@@ -93,11 +92,11 @@ export default class OnePhotographer {
             callBack(this.handleNavigateLightbox);
         }
 
-        // 
+        /* =============== Bloquer le focus dans la modale lightbox =============== */
         const focusableElements = "button, [tabindex]:not([tabindex='-1'])";
         const modal = document.querySelector("#modal-lightbox");
 
-        const firstFocusableElement = modal.querySelectorAll(focusableElements)[0]; // get first element to be focused inside modal
+        const firstFocusableElement = modal.querySelectorAll(focusableElements)[0];
         const focusableContent = modal.querySelectorAll(focusableElements);
 
         let isTabPressed = e.key === "Tab" || e.keyCode === 9;
@@ -108,9 +107,9 @@ export default class OnePhotographer {
 
         if (document.activeElement === firstFocusableElement) {
             e.preventDefault();
-            focusableContent[0].focus(); // add focus for the last focusable element
+            focusableContent[0].focus();
         }
-        else if (document.activeElement === focusableContent[1]) { // if focused has reached to last focusable element then focus first focusable element after pressing tab
+        else if (document.activeElement === focusableContent[1]) {
             e.preventDefault();
             focusableContent[1].focus();
         }
@@ -125,6 +124,11 @@ export default class OnePhotographer {
         }
     }
 
+    /**
+     * @param {MouseEvents|KeyboardEvents} e 
+     * @param {String} direction 
+     * Event function qui permet la navigation entre chaque images et videos dans la lightbox
+     */
     _handleNavigateLightbox(e, direction) {
         e.preventDefault();
         this.direction = e.target.dataset.direction;
@@ -148,9 +152,14 @@ export default class OnePhotographer {
         this.indexOfImgLightbox += this.iDirection;
     }
 
+    /**
+     * @param {Event} e 
+     * @param {[object]} array 
+     * function qui trouve l'index du media qui à été cliqué pour afficher le bon media dans la lightbox 
+     */
     findIndex(e, array) {
         this.id = e.target.getAttribute("id");
-        this.divImgVideoLightbox.innerHTML = "<div class='lightbox__loader'></div>";
+        // this.divImgVideoLightbox.innerHTML = "<div class='lightbox__loader'></div>";
         array.findIndex(element => {
             element.id === this.id;
             if (element.id == this.id) {
@@ -162,6 +171,11 @@ export default class OnePhotographer {
         });
     }
 
+    /**
+     * @param {Array} array 
+     * @param {number} index 
+     * function qui gère le controle des videos pour pouvoir lancer la video grace a l'attribut "controls"
+     */
     handleControlsVideo(array, index) {
         if (array[index].video) {
             const video = document.getElementsByClassName("js-video")[1];
@@ -217,13 +231,14 @@ export default class OnePhotographer {
             })
             .then(data => {
                 this.arrayPhotographers = data; // enregistrement du tableau fetch
-                this.filterPhotographer();
-                this.filterMedia();
-                const loaders = document.querySelectorAll(".js-loader");
-                loaders.forEach(loader => {
-                    console.log(loader);
-                    loader.className += " hidden";
-                });
+                if (data) {
+                    this.filterPhotographer();
+                    this.filterMedia();
+                    const loaders = document.querySelectorAll(".js-loader");
+                    loaders.forEach(loader => {
+                        loader.className += " hidden";
+                    });
+                }
             });
     }
 
@@ -233,7 +248,7 @@ export default class OnePhotographer {
      */
     filterPhotographer() {
         this.arrayPhotographers.photographers.filter(e => {
-            if (this.idPhotographer == e.id) {
+            if (this.idPhotographerUrl == e.id) {
                 this.photographer = e;
                 this.displayDataPagePhotographer(this.photographer);
             }
@@ -243,7 +258,7 @@ export default class OnePhotographer {
     filterMedia() {
         this.arrayPhotographers.media.filter(e => {
 
-            if (this.idPhotographer == e.photographerId) {
+            if (this.idPhotographerUrl == e.photographerId) {
                 this.arrayMedia = e;
                 this.newArrMedia.push(this.arrayMedia);
                 this.newArrMedia.sort((a, b) => b.likes - a.likes);
@@ -334,7 +349,6 @@ export default class OnePhotographer {
         }
         else {
             return `
-                <div class="loader js-loader"></div>
                 <img tabindex="0" class="js-card" role="img" src="./assets/samplePhotos/${this.photographer.id}/${item.image}" alt="${item.title}" id="${item.id}" />
             `;
         }
